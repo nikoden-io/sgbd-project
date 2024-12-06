@@ -4,8 +4,8 @@ namespace SgbdProject.Application.DTOs;
 
 public class CreateGroupDTO
 {
+    public Guid UniversityId { get; set; }
     [Required] public string Name { get; set; }
-
     [Required] public Guid MainSiteId { get; set; }
 
     [Required]

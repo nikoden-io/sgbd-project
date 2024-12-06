@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SgbdProject.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,7 +63,8 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_Courses_Universities_UniversityId",
                         column: x => x.UniversityId,
                         principalTable: "Universities",
-                        principalColumn: "UniversityId");
+                        principalColumn: "UniversityId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,7 +83,8 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_Sites_Universities_UniversityId",
                         column: x => x.UniversityId,
                         principalTable: "Universities",
-                        principalColumn: "UniversityId");
+                        principalColumn: "UniversityId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,7 +106,8 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_Classrooms_Sites_SiteId",
                         column: x => x.SiteId,
                         principalTable: "Sites",
-                        principalColumn: "SiteId");
+                        principalColumn: "SiteId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -122,12 +125,14 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_CourseSites_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId");
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CourseSites_Sites_SiteId",
                         column: x => x.SiteId,
                         principalTable: "Sites",
-                        principalColumn: "SiteId");
+                        principalColumn: "SiteId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -136,7 +141,7 @@ namespace SgbdProject.Infrastructure.Migrations
                 {
                     GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UniversityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MainSiteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MainSiteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumberOfStudents = table.Column<int>(type: "int", nullable: false)
                 },
@@ -147,12 +152,14 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_Groups_Sites_MainSiteId",
                         column: x => x.MainSiteId,
                         principalTable: "Sites",
-                        principalColumn: "SiteId");
+                        principalColumn: "SiteId",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Groups_Universities_UniversityId",
                         column: x => x.UniversityId,
                         principalTable: "Universities",
-                        principalColumn: "UniversityId");
+                        principalColumn: "UniversityId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -171,7 +178,8 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_Holiday_Sites_SiteId",
                         column: x => x.SiteId,
                         principalTable: "Sites",
-                        principalColumn: "SiteId");
+                        principalColumn: "SiteId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,7 +199,8 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_SiteSchedule_Sites_SiteId",
                         column: x => x.SiteId,
                         principalTable: "Sites",
-                        principalColumn: "SiteId");
+                        principalColumn: "SiteId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,8 +208,8 @@ namespace SgbdProject.Infrastructure.Migrations
                 columns: table => new
                 {
                     TravelTimeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FromSiteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ToSiteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FromSiteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ToSiteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DurationInMinutes = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -210,12 +219,14 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_TravelTimes_Sites_FromSiteId",
                         column: x => x.FromSiteId,
                         principalTable: "Sites",
-                        principalColumn: "SiteId");
+                        principalColumn: "SiteId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TravelTimes_Sites_ToSiteId",
                         column: x => x.ToSiteId,
                         principalTable: "Sites",
-                        principalColumn: "SiteId");
+                        principalColumn: "SiteId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -234,17 +245,20 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_CourseGroup_AcademicYear_AcademicYearId",
                         column: x => x.AcademicYearId,
                         principalTable: "AcademicYear",
-                        principalColumn: "AcademicYearId");
+                        principalColumn: "AcademicYearId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CourseGroup_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId");
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CourseGroup_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId");
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -254,7 +268,7 @@ namespace SgbdProject.Infrastructure.Migrations
                     ScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassroomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClassroomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
@@ -267,22 +281,26 @@ namespace SgbdProject.Infrastructure.Migrations
                         name: "FK_Schedules_AcademicYear_AcademicYearId",
                         column: x => x.AcademicYearId,
                         principalTable: "AcademicYear",
-                        principalColumn: "AcademicYearId");
+                        principalColumn: "AcademicYearId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Schedules_Classrooms_ClassroomId",
                         column: x => x.ClassroomId,
                         principalTable: "Classrooms",
-                        principalColumn: "ClassroomId");
+                        principalColumn: "ClassroomId",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Schedules_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId");
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Schedules_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId");
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

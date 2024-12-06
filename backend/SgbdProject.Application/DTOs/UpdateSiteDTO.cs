@@ -1,8 +1,7 @@
 namespace SgbdProject.Application.DTOs;
 
-public class CreateSiteDTO
+public class UpdateSiteDTO
 {
-    public Guid UniversityId { get; set; }
     public string Name { get; set; }
     public string Address { get; set; }
 }

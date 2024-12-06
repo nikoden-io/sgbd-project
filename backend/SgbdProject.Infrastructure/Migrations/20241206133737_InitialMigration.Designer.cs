@@ -12,8 +12,8 @@ using SgbdProject.Infrastructure;
 namespace SgbdProject.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241206063149_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241206133737_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,7 +165,7 @@ namespace SgbdProject.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MainSiteId")
+                    b.Property<Guid?>("MainSiteId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -219,7 +219,7 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.Property<Guid>("AcademicYearId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClassroomId")
+                    b.Property<Guid?>("ClassroomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CourseId")
@@ -308,10 +308,10 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.Property<int>("DurationInMinutes")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("FromSiteId")
+                    b.Property<Guid?>("FromSiteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ToSiteId")
+                    b.Property<Guid?>("ToSiteId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TravelTimeId");
@@ -358,7 +358,7 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.Site", "Site")
                         .WithMany("Classrooms")
                         .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Site");
@@ -369,7 +369,7 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.University", "University")
                         .WithMany("Courses")
                         .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("University");
@@ -380,19 +380,19 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.AcademicYear", "AcademicYear")
                         .WithMany("CourseGroups")
                         .HasForeignKey("AcademicYearId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SgbdProject.Domain.Entities.Course", "Course")
                         .WithMany("CourseGroups")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SgbdProject.Domain.Entities.Group", "Group")
                         .WithMany("CourseGroups")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AcademicYear");
@@ -407,13 +407,13 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.Course", "Course")
                         .WithMany("CourseSites")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SgbdProject.Domain.Entities.Site", "Site")
                         .WithMany("CourseSites")
                         .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -426,13 +426,12 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.Site", "MainSite")
                         .WithMany()
                         .HasForeignKey("MainSiteId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("SgbdProject.Domain.Entities.University", "University")
                         .WithMany("Groups")
                         .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("MainSite");
@@ -445,7 +444,7 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.Site", "Site")
                         .WithMany("Holidays")
                         .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Site");
@@ -456,25 +455,24 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.AcademicYear", "AcademicYear")
                         .WithMany("Schedules")
                         .HasForeignKey("AcademicYearId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SgbdProject.Domain.Entities.Classroom", "Classroom")
                         .WithMany("Schedules")
                         .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("SgbdProject.Domain.Entities.Course", "Course")
                         .WithMany("Schedules")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SgbdProject.Domain.Entities.Group", "Group")
                         .WithMany("Schedules")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AcademicYear");
@@ -491,7 +489,7 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.University", "University")
                         .WithMany("Sites")
                         .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("University");
@@ -502,7 +500,7 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.Site", "Site")
                         .WithMany("SiteSchedules")
                         .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Site");
@@ -513,14 +511,12 @@ namespace SgbdProject.Infrastructure.Migrations
                     b.HasOne("SgbdProject.Domain.Entities.Site", "FromSite")
                         .WithMany()
                         .HasForeignKey("FromSiteId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SgbdProject.Domain.Entities.Site", "ToSite")
                         .WithMany()
                         .HasForeignKey("ToSiteId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("FromSite");
 

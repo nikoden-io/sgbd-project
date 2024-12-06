@@ -1,32 +1,28 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SgbdProject.Api.Middlewares;
+using SgbdProject.Application;
 using SgbdProject.Application.Interfaces;
 using SgbdProject.Infrastructure;
 using SgbdProject.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
+
 builder.Services.AddControllers();
 
-// Register ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register repositories
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<ISiteRepository, SiteRepository>();
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
-// Register other repositories similarly
 
-// Register MediatR
-builder.Services.AddMediatR(typeof(Program));
-
-// Register AutoMapper
+builder.Services.AddMediatR(typeof(ApplicationAssemblyMarker).Assembly);
 builder.Services.AddAutoMapper(typeof(Program));
 
-// Build the app
 var app = builder.Build();
-
-// Configure the HTTP request pipeline
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
-app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
+app.MapControllers();
 app.Run();

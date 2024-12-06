@@ -1,8 +1,7 @@
 namespace SgbdProject.Application.DTOs;
 
-public class CreateCourseDTO
+public class UpdateCourseDTO
 {
-    public Guid UniversityId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public bool RequiresProjector { get; set; }
