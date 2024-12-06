@@ -5,11 +5,16 @@
 
 - [Unreleased](#unreleased)
 - [Released](#released)
-    - [v0.1.0 - 2024-12-05](#v010---2024-12-05)
+    - [v0.1.0 - 2024-12-06](#v010---2024-12-06)
 
 ## Unreleased
+
+## Released
+
+### v0.1.0 - 2024-12-06
+
 - Controllers
-  - Add **AdministrationController** with a full set of CRUD endpoints for: 
+  - Add **AdministrationController** with a full set of CRUD endpoints for:
     - **Courses**
     - **Groups**
     - **Sites**
@@ -45,6 +50,3 @@
     - Create **ApplicationDbContext**
     - Apply initial migrations
     - Update database (Docker SQL hosted)
-## Released
-
-### v0.1.0 - 2024-12-05
